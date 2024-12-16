@@ -11,38 +11,41 @@ from bokeh.models import Label
 
 
 app_text = {
-    "title": "Federal AI inventory analysis 2023",
-    "footer": "Built by [Travis Hoppe](https://github.com/thoppe/Federal-AI-inventory-analysis-2023).",
+    "title": "Federal AI inventory analysis 2024",
+    "footer": "Built by [Travis Hoppe](https://github.com/thoppe/Federal-AI-inventory-analysis-2024).",
 }
-
 
 start_time = datetime.datetime.now()
 
 st.set_page_config(layout="wide")
 st.title(app_text["title"])
 
-
 @st.cache_data
 def load_data():
-    embedding = np.load("data/GPT_umap.npy")
-    df_keywords = pd.read_csv("data/GPT_cluster_keywords.csv")
-    clusters = np.load("data/GPT_clusters.npy")
+    load_dest = Path("data/processed_responses/")
+    
+    embedding = np.load(load_dest / "GPT_umap.npy")
+    df_keywords = pd.read_csv(load_dest / "GPT_cluster_keywords.csv")
+    clusters = np.load(load_dest / "GPT_clusters.npy")
 
-    f_json = "data/GPT_automated_analysis.json"
+    key = "Use Case ID"
+    df0 = pd.read_csv(load_dest / "basic_consolidated.csv")
+    df1 = pd.read_csv(load_dest / "summary_text.csv")
 
-    with open(f_json) as FIN:
-        js = json.load(FIN)
-    df = pd.DataFrame(js["record_content"])
-    df["ux"], df["uy"] = embedding.T
+    df0 = df0.set_index(key)
+    df1 = df1.set_index(key)
 
-    return df, df_keywords, clusters
+    df0['summary_text'] = df1['summary_text']  
+    df0["ux"], df0["uy"] = embedding.T
+   
+    return df0, df_keywords, clusters
 
 
 df, df_keywords, clusters = load_data()
 
-n_text_show = st.sidebar.slider("Number of text labels", 0, 50, 30)
+n_text_show = st.sidebar.slider("Number of text labels", 0, 30, 10)
 
-dept_opt = df.groupby("Department").size().sort_values(ascending=False).index.tolist()
+dept_opt = df.groupby("Agency").size().sort_values(ascending=False).index.tolist()
 dept_opt = ["None"] + sorted(dept_opt)
 highlight_department = st.sidebar.selectbox("Highlight Dept/Agency", dept_opt)
 
@@ -52,7 +55,7 @@ if highlight_text:
 else:
     highlight_text = "DO NOT MATCH TO ANYTHING"
 textword_highlight_idx = (
-    df["project_title_text"].str.lower().str.find(highlight_text) > -1
+    df["summary_text"].str.lower().str.find(highlight_text) > -1
 )
 
 ## Basic coloring
@@ -70,7 +73,7 @@ df["size"] = point_size
 df["alpha"] = 0.4
 
 # Custom coloring
-text_highlight_idx = df["Department"] == highlight_department
+text_highlight_idx = df["Agency"] == highlight_department
 
 if textword_highlight_idx.sum():
     st.sidebar.write(
@@ -93,9 +96,9 @@ df.loc[text_highlight_idx, "line_width"] = 2
 df.loc[text_highlight_idx, "alpha"] = 0.8
 
 viz_cols = [
-    "Title",
-    "Department",
-    "project_title_text",
+    "Agency",
+    "Component",
+    "summary_text",
 ]
 
 df["line_width"] = 0.1
