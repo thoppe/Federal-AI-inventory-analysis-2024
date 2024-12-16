@@ -17,26 +17,29 @@ model_name = "gpt-4o-mini"
 df = pd.read_csv(f_data)
 
 text_fields = [
-    'Use Case Name',
-    'What is the intended purpose and expected benefits of the AI?',
-    'Describe the AI system’s outputs.',
+    "Use Case Name",
+    "What is the intended purpose and expected benefits of the AI?",
+    "Describe the AI system’s outputs.",
 ]
 
 for key in text_fields:
     df[key] = df[key].fillna("")
 
-df['full_text'] = (df[text_fields[0]] + '\n' + df[text_fields[1]] + '\n' + df[text_fields[2]])
+df["full_text"] = (
+    df[text_fields[0]] + "\n" + df[text_fields[1]] + "\n" + df[text_fields[2]]
+)
 
 client = OpenAI(api_key=API_KEY)
+
 
 def cached_openai_call(prompt, text):
     key = (prompt, text)
     if key in cache:
         return cache[key]
 
-    messages=[
+    messages = [
         {"role": "system", "content": prompt},
-        {"role": "user", "content": text}
+        {"role": "user", "content": text},
     ]
 
     chat_completion = client.chat.completions.create(
@@ -49,26 +52,25 @@ def cached_openai_call(prompt, text):
     cache[key] = response
     return cache[key]
 
+
 prompt = "Summarize the following project into two or three sentences. Use declarative language."
 
 data = []
-for text in tqdm(df['full_text']):
-    summary_text = cached_openai_call(prompt, text)    
+for text in tqdm(df["full_text"]):
+    summary_text = cached_openai_call(prompt, text)
     print("***********************")
     print(text)
     print("-----------------------")
     print(summary_text)
     data.append(summary_text)
 
-df['summary_text'] = data
+df["summary_text"] = data
 
 keep_cols = [
-    'Use Case ID',
-    'Use Case Name',
-    'summary_text',
+    "Use Case ID",
+    "Use Case Name",
+    "summary_text",
 ]
 
-df = df[keep_cols].set_index('Use Case ID')
+df = df[keep_cols].set_index("Use Case ID")
 df.to_csv("processed_responses/summary_text.csv")
-
-
