@@ -2,6 +2,7 @@ import os
 from openai import OpenAI
 import pandas as pd
 from diskcache import Cache
+from tqdm import tqdm
 
 # Save the responses so we don't have to rerun
 cache = Cache("cache/GPT_summerization")
@@ -20,6 +21,9 @@ text_fields = [
     'What is the intended purpose and expected benefits of the AI?',
     'Describe the AI system’s outputs.',
 ]
+
+for key in text_fields:
+    df[key] = df[key].fillna("")
 
 df['full_text'] = (df[text_fields[0]] + '\n' + df[text_fields[1]] + '\n' + df[text_fields[2]])
 
@@ -40,11 +44,31 @@ def cached_openai_call(prompt, text):
         model=model_name,
     )
 
-    print(chat_completion)
-    exit()
+    response = chat_completion.choices[0].message.content
+
+    cache[key] = response
+    return cache[key]
 
 prompt = "Summarize the following project into two or three sentences. Use declarative language."
 
-for text in df['full_text']:
-    cached_openai_call(prompt, text)
+data = []
+for text in tqdm(df['full_text']):
+    summary_text = cached_openai_call(prompt, text)    
+    print("***********************")
+    print(text)
+    print("-----------------------")
+    print(summary_text)
+    data.append(summary_text)
+
+df['summary_text'] = data
+
+keep_cols = [
+    'Use Case ID',
+    'Use Case Name',
+    'summary_text',
+]
+
+df = df[keep_cols].set_index('Use Case ID')
+df.to_csv("processed_responses/summary_text.csv")
+
 
