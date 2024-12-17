@@ -19,6 +19,7 @@ start_time = datetime.datetime.now()
 
 st.set_page_config(layout="wide")
 st.title(app_text["title"])
+st.markdown("_Draft viz - Work in progress_")
 
 
 @st.cache_data
@@ -44,7 +45,7 @@ def load_data():
 
 df, df_keywords, clusters = load_data()
 
-n_text_show = st.sidebar.slider("Number of text labels", 0, 30, 10)
+n_text_show = st.sidebar.slider("Number of text labels", 0, df_keywords['n_clusters'].max(), 20)
 
 dept_opt = df.groupby("Agency").size().sort_values(ascending=False).index.tolist()
 dept_opt = ["None"] + sorted(dept_opt)

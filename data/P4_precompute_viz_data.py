@@ -8,7 +8,7 @@ import pandas as pd
 force = False
 
 # Maximum fidelity we need
-n_max_clusters = 30
+n_max_clusters = 20
 
 
 def load_vectors(f_npy, n_dim=40):
