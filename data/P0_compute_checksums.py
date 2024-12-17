@@ -4,6 +4,7 @@ import pandas as pd
 
 f_save = "processed_responses/raw_agency_checksums.csv"
 
+
 def compute_md5(file_path):
     md5_hash = hashlib.md5()
     with open(file_path, "rb") as file:

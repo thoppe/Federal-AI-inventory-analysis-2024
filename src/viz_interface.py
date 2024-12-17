@@ -19,7 +19,7 @@ def plot_data_bokeh(df, hover_columns=None, tooltips=None, height=600, width=160
     )
 
     source = ColumnDataSource(df)
-    
+
     p.circle(
         x="ux",
         y="uy",

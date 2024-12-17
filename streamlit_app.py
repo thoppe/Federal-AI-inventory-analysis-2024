@@ -20,10 +20,11 @@ start_time = datetime.datetime.now()
 st.set_page_config(layout="wide")
 st.title(app_text["title"])
 
+
 @st.cache_data
 def load_data():
     load_dest = Path("data/processed_responses/")
-    
+
     embedding = np.load(load_dest / "GPT_umap.npy")
     df_keywords = pd.read_csv(load_dest / "GPT_cluster_keywords.csv")
     clusters = np.load(load_dest / "GPT_clusters.npy")
@@ -35,9 +36,9 @@ def load_data():
     df0 = df0.set_index(key)
     df1 = df1.set_index(key)
 
-    df0['summary_text'] = df1['summary_text']  
+    df0["summary_text"] = df1["summary_text"]
     df0["ux"], df0["uy"] = embedding.T
-   
+
     return df0, df_keywords, clusters
 
 
@@ -54,9 +55,7 @@ if highlight_text:
     highlight_text = highlight_text.lower()
 else:
     highlight_text = "DO NOT MATCH TO ANYTHING"
-textword_highlight_idx = (
-    df["summary_text"].str.lower().str.find(highlight_text) > -1
-)
+textword_highlight_idx = df["summary_text"].str.lower().str.find(highlight_text) > -1
 
 ## Basic coloring
 

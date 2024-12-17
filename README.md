@@ -20,6 +20,12 @@ _🚧 Placeholder for the 2024 Inventory anaylsis 🚧_
 
 **Remaining Agencies are still fully missing**
 
+## Datasets
+
++ [Folder with raw agency responses](data/raw_agency_responses/)
++ [MD5 checksum of raw](data/processed_responses/raw_agency_checksums.csv)
++ [Folder with cleaned agency responses](data/cleaned_agency_responses/)
+
 ## Links and news
 
 + [Federal AI inventory analysis 2023](https://github.com/thoppe/Federal-AI-inventory-analysis-2023), Prior analysis this work is based off of
