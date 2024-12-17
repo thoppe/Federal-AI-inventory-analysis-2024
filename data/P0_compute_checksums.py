@@ -2,8 +2,7 @@ from pathlib import Path
 import hashlib
 import pandas as pd
 
-f_save = "agency_checksums.csv"
-
+f_save = "processed_responses/raw_agency_checksums.csv"
 
 def compute_md5(file_path):
     md5_hash = hashlib.md5()
@@ -16,7 +15,7 @@ def compute_md5(file_path):
 
 data = []
 
-for f in Path(".").glob("*"):
+for f in Path("raw_agency_responses").glob("*"):
     if f.suffix in [".xlsx", ".csv"]:
         if "checksums" in f.name:
             continue
