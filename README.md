@@ -10,7 +10,7 @@ _🚧 Placeholder for the 2024 Inventory anaylsis 🚧_
 + HHS
 + HUD
 + VA
-+ DHS
++ DHS (Added an extra summary column)
 + EPA
 
 **Agencies submitted with missing information**
@@ -18,7 +18,7 @@ _🚧 Placeholder for the 2024 Inventory anaylsis 🚧_
 + USDA
 + SSA
 
-**Remaining Agencies are still fully missing**
+**Remaining CFO Agencies are still fully missing (not listed)**
 
 ## Datasets
 

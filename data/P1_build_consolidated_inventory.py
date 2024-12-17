@@ -22,6 +22,16 @@ for f in Path("cleaned_agency_responses").glob("*.csv"):
             print(f"Missing '{key}' in {f}")
             exit(1)
 
+    # DHS is special and created a new important text column
+    # "Summary of Use Case", fold this into purpose field
+
+    agency = f.name.split("_")[0]
+
+    if agency == "DHS":
+        key0 = "What is the intended purpose and expected benefits of the AI?"
+        key1 = "Summary of Use Case"
+        dx[key] = dx[key0] + "\n\n" + dx[key1]
+
     dx = dx[required_columns]
     data.append(dx)
 
