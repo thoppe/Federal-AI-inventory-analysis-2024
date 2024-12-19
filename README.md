@@ -5,6 +5,8 @@ Raw 2024 AI use-cases provided by [OMB](https://github.com/ombegov/2024-Federal-
 
 Use cases were cleaned and DHS was supplemented with the data they provided on their own website.
 
+An agencies "full-text" for a use-case is found by concatenating the three fields: `2_usecase_name`, `11_purpose_benefits`, `12_outputs`.
+
 ## Agency status
 
 **Missing**

@@ -2,17 +2,20 @@ import os
 from openai import OpenAI
 import pandas as pd
 from diskcache import Cache
+from pathlib import Path
 from tqdm import tqdm
 
 # Save the responses so we don't have to rerun
-cache = Cache("cache/GPT_summerization")
+cache = Cache("data/cache/GPT_summerization")
 
 # Access the saved OPEN_AI KEY
 API_KEY = os.getenv("OPENAI_API_KEY_FEDERAL_USECASE_INVENTORY")
 assert API_KEY
 
 # f_data = "processed_responses/basic_consolidated.csv"
-f_data = "2024_consolidated_ai_inventory_raw.csv"
+f_data = "data/cleaned_OMB_inventory.csv"
+f_save = Path("data/processed/summary_text.csv")
+f_save.parents[0].mkdir(parents=True, exist_ok=True)
 
 model_name = "gpt-4o-mini"
 
@@ -27,7 +30,7 @@ text_fields = [
 for key in text_fields:
     df[key] = df[key].fillna("")
 
-df["full_text"] = (
+df["x1_full_text"] = (
     df[text_fields[0]] + "\n" + df[text_fields[1]] + "\n" + df[text_fields[2]]
 )
 
@@ -58,7 +61,7 @@ def cached_openai_call(prompt, text):
 prompt = "Summarize the following project into two or three sentences. Use declarative language."
 
 data = []
-for text in tqdm(df["full_text"]):
+for text in tqdm(df["x1_full_text"]):
     summary_text = cached_openai_call(prompt, text)
     print("***********************")
     print(text)
@@ -66,13 +69,13 @@ for text in tqdm(df["full_text"]):
     print(summary_text)
     data.append(summary_text)
 
-df["summary_text"] = data
+df["x2_summary_text"] = data
 
 keep_cols = [
-    #    "Use Case ID",
+    "1_use_case_id",
     "2_use_case_name",
-    "summary_text",
+    "x2_summary_text",
 ]
 
-df = df[keep_cols]  # .set_index("Use Case ID")
-df.to_csv("processed_responses/summary_text.csv", index=False)
+df = df[keep_cols].set_index("1_use_case_id")
+df.to_csv(f_save)

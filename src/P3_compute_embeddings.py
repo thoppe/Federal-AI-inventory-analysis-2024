@@ -5,12 +5,12 @@ from diskcache import Cache
 from tqdm import tqdm
 import numpy as np
 
-f_data = "processed_responses/summary_text.csv"
-f_save = "processed_responses/GPT_embedding.npy"
+f_data = "processed/summary_text.csv"
+f_save = "processed/GPT_embedding.npy"
 model_name = "text-embedding-3-large"
 
 # Save the responses so we don't have to rerun
-cache = Cache("cache/GPT_embeddings")
+cache = Cache("data/cache/GPT_embeddings")
 
 # Access the saved OPEN_AI KEY
 API_KEY = os.getenv("OPENAI_API_KEY_FEDERAL_USECASE_INVENTORY")
