@@ -12,7 +12,6 @@ cache = Cache("data/cache/GPT_summerization")
 API_KEY = os.getenv("OPENAI_API_KEY_FEDERAL_USECASE_INVENTORY")
 assert API_KEY
 
-# f_data = "processed_responses/basic_consolidated.csv"
 f_data = "data/cleaned_OMB_inventory.csv"
 f_save = Path("data/processed/summary_text.csv")
 f_save.parents[0].mkdir(parents=True, exist_ok=True)

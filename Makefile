@@ -4,6 +4,9 @@
 compute:
 	python src/P0_compute_checksums.py
 	python src/P1_clean_inventory.py
+	python src/P2_compute_summary.py
+	python src/P3_compute_embeddings.py
+	python src/P4_precompute_viz_data.py
 
 streamlit:
 	streamlit run streamlit_app.py

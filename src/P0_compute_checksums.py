@@ -3,20 +3,24 @@ from dspipe import Pipe
 import hashlib
 import pandas as pd
 
-# f_save = "processed_responses/raw_agency_checksums.csv"
 
-
-def compute(f0, f1):
+def compute_file_checksum(f0):
     md5_hash = hashlib.md5()
     with open(f0, "rb") as file:
         # Read the file in chunks to handle large files efficiently
         for chunk in iter(lambda: file.read(4096), b""):
             md5_hash.update(chunk)
-    hx = md5_hash.hexdigest()
+    return md5_hash.hexdigest()
+
+
+def compute(f0, f1):
+    hx = compute_file_checksum(f0)
+
     with open(f1, "w") as FOUT:
         FOUT.write(hx)
 
     print(f1, hx)
 
 
-Pipe("data/raw", "data/raw_checksums", output_suffix=".txt")(compute, 1)
+if __name__ == "__main__":
+    Pipe("data/raw", "data/checksums", output_suffix=".txt")(compute, 1)

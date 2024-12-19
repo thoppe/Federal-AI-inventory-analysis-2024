@@ -5,9 +5,10 @@ from diskcache import Cache
 from tqdm import tqdm
 import numpy as np
 
-f_data = "processed/summary_text.csv"
-f_save = "processed/GPT_embedding.npy"
 model_name = "text-embedding-3-large"
+
+f_data = "data/processed/summary_text.csv"
+f_save = "data/processed/GPT_embedding.npy"
 
 # Save the responses so we don't have to rerun
 cache = Cache("data/cache/GPT_embeddings")
@@ -25,20 +26,22 @@ def cached_openai_call(text):
     if key in cache:
         return cache[key]
 
-    response = client.embeddings.create(input=text, model=model_name)
+    print(f"Computing embedding for: {text}")
 
+    response = client.embeddings.create(input=text, model=model_name)
     z = response.data[0].embedding
 
     cache[key] = z
+
+    print(z[:5])
+
     return cache[key]
 
 
 Z = []
-for text in tqdm(df["summary_text"]):
+for text in tqdm(df["x2_summary_text"]):
     single_embedding = cached_openai_call(text)
     Z.append(single_embedding)
-    print(text)
-    print(single_embedding[:5])
 
 Z = np.array(Z)
 np.save(f_save, Z)

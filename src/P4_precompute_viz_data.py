@@ -3,18 +3,34 @@ import numpy as np
 import json
 from tqdm import tqdm
 import pandas as pd
+from P0_compute_checksums import compute_file_checksum
 
 # Set this flag if we have new data
 force = False
 
 # Maximum fidelity we need
-n_max_clusters = 40
+n_max_clusters = 5
 
-f_summary_text = Path("processed_responses/summary_text.csv")
-f_embedding = Path("processed_responses/GPT_embedding.npy")
-f_umap = Path("processed_responses/GPT_umap.npy")
-f_clusters = Path("processed_responses/GPT_clusters.npy")
-f_keywords = Path("processed_responses/GPT_cluster_keywords.csv")
+data_dest = Path("data/processed")
+
+f_checksum = Path("data/checksums/cleaned_OMB_inventory.txt")
+f_summary_text = data_dest / "summary_text.csv"
+f_embedding = data_dest / "GPT_embedding.npy"
+f_umap = data_dest / "GPT_umap.npy"
+f_clusters = data_dest / "GPT_clusters.npy"
+f_keywords = data_dest / "GPT_cluster_keywords.csv"
+
+if f_checksum.exists():
+    hx0 = open(f_checksum).read()
+else:
+    hx0 = None
+
+hx1 = compute_file_checksum(f_summary_text)
+
+# Force update if the file is new (to avoid git caching on write date)
+if hx0 != hx1:
+    print("Forced update on all files, checksums do not match")
+    force = True
 
 
 def load_vectors(f_npy, n_dim=40):
@@ -83,7 +99,7 @@ if not f_keywords.exists() or force:
         for i in range(0, k):
             idx = clusters[k - 1] == i
 
-            doc = "\n".join(df["summary_text"].values[idx][:CUTOFF])
+            doc = "\n".join(df["x2_summary_text"].values[idx][:CUTOFF])
             Z = embedding[idx]
             ux, uy = Z.T
             kw = kw_model.extract_keywords(doc, **args)
@@ -103,3 +119,8 @@ if not f_keywords.exists() or force:
     kws = pd.DataFrame(data)
     kws.to_csv(f_keywords, index=False)
     print(f"Saved {f_keywords}")
+
+
+with open(f_checksum, "w") as FOUT:
+    FOUT.write(hx1)
+print(f"Updated {f_checksum}")
