@@ -19,4 +19,4 @@ def compute(f0, f1):
     print(f1, hx)
 
 
-Pipe("data/raw", "data/raw_agency_checksums", output_suffix=".txt")(compute, 1)
+Pipe("data/raw", "data/raw_checksums", output_suffix=".txt")(compute, 1)
