@@ -2,7 +2,7 @@
 #output_md5file="data/ai_gov_md5hash.csv"
 
 compute:
-#	python src/P0_compute_checksums.py
+	python src/P0_compute_checksums.py
 	python src/P1_clean_inventory.py
 
 streamlit:
@@ -10,6 +10,3 @@ streamlit:
 
 lint:
 	black . data
-
-#record_website_hash:
-#	@python src/md5_webpage.py $(target_url) >> $(output_md5file)

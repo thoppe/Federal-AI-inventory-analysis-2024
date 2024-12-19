@@ -1,26 +1,22 @@
 # Federal-AI-inventory-analysis-2024
 Analysis of the projects reported on the Federal inventory for EO 14110 and M-24-10
 
-_🚧 Placeholder for the 2024 Inventory anaylsis 🚧_
+Raw 2024 AI use-cases provided by [OMB](https://github.com/ombegov/2024-Federal-AI-Use-Case-Inventory).
+
+Use cases were cleaned and DHS was supplemented with the data they provided on their own website.
 
 ## Agency status
 
-**Completed Agencies**
+**Missing**
 
-+ HHS
-+ HUD
-+ VA
-+ DHS (Added an extra summary column)
-+ EPA
-
-**Agencies submitted with missing information**
-
-+ USDA
 + SSA
-
-**Remaining CFO Agencies are still fully missing (not listed)**
++ DOT
++ ED
++ DOJ
 
 ## Datasets
+
+TBD (outdated)
 
 + [Folder with raw agency responses](data/raw_agency_responses/)
 + [MD5 checksum of raw](data/processed_responses/raw_agency_checksums.csv)
@@ -28,7 +24,7 @@ _🚧 Placeholder for the 2024 Inventory anaylsis 🚧_
 
 ## Links and news
 
-+ [Federal AI inventory analysis 2023](https://github.com/thoppe/Federal-AI-inventory-analysis-2023), Prior analysis this work is based off of
++ [Federal AI inventory analysis 2023](https://github.com/thoppe/Federal-AI-inventory-analysis-2023), Aalysis on previous inventory.
 + [HHS reports 66% increase in AI uses as agencies release inventories](https://fedscoop.com/hhs-reports-66-increase-in-ai-uses-as-agencies-release-inventories/)
 
 ## Resources
