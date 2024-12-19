@@ -8,7 +8,14 @@ import pandas as pd
 force = False
 
 # Maximum fidelity we need
-n_max_clusters = 20
+n_max_clusters = 40
+
+f_summary_text = Path("processed_responses/summary_text.csv")
+f_embedding = Path("processed_responses/GPT_embedding.npy")
+f_umap = Path("processed_responses/GPT_umap.npy")
+f_clusters = Path("processed_responses/GPT_clusters.npy")
+f_keywords = Path("processed_responses/GPT_cluster_keywords.csv")
+
 
 
 def load_vectors(f_npy, n_dim=40):
@@ -44,11 +51,6 @@ def cluster_data(embedding, num_text_labels=25):
     return clf.fit_predict(embedding)
 
 
-f_embedding = Path("processed_responses/GPT_embedding.npy")
-f_umap = Path("processed_responses/GPT_umap.npy")
-f_clusters = Path("processed_responses/GPT_clusters.npy")
-f_keywords = Path("processed_responses/GPT_cluster_keywords.csv")
-f_summary_text = Path("processed_responses/summary_text.csv")
 
 if not f_umap.exists() or force:
     V = load_vectors(f_embedding)
