@@ -17,7 +17,6 @@ f_clusters = Path("processed_responses/GPT_clusters.npy")
 f_keywords = Path("processed_responses/GPT_cluster_keywords.csv")
 
 
-
 def load_vectors(f_npy, n_dim=40):
     from sklearn.decomposition import IncrementalPCA
 
@@ -49,7 +48,6 @@ def cluster_data(embedding, num_text_labels=25):
 
     clf = MiniBatchKMeans(n_clusters=num_text_labels, batch_size=1000)
     return clf.fit_predict(embedding)
-
 
 
 if not f_umap.exists() or force:

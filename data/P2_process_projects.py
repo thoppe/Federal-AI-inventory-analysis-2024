@@ -11,7 +11,7 @@ cache = Cache("cache/GPT_summerization")
 API_KEY = os.getenv("OPENAI_API_KEY_FEDERAL_USECASE_INVENTORY")
 assert API_KEY
 
-#f_data = "processed_responses/basic_consolidated.csv"
+# f_data = "processed_responses/basic_consolidated.csv"
 f_data = "2024_consolidated_ai_inventory_raw.csv"
 
 model_name = "gpt-4o-mini"
@@ -69,10 +69,10 @@ for text in tqdm(df["full_text"]):
 df["summary_text"] = data
 
 keep_cols = [
-#    "Use Case ID",
+    #    "Use Case ID",
     "2_use_case_name",
     "summary_text",
 ]
 
-df = df[keep_cols]#.set_index("Use Case ID")
+df = df[keep_cols]  # .set_index("Use Case ID")
 df.to_csv("processed_responses/summary_text.csv", index=False)

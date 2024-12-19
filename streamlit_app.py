@@ -45,7 +45,9 @@ def load_data():
 
 df, df_keywords, clusters = load_data()
 
-n_text_show = st.sidebar.slider("Number of text labels", 0, df_keywords['n_clusters'].max(), 20)
+n_text_show = st.sidebar.slider(
+    "Number of text labels", 0, df_keywords["n_clusters"].max(), 20
+)
 
 dept_opt = df.groupby("Agency").size().sort_values(ascending=False).index.tolist()
 dept_opt = ["None"] + sorted(dept_opt)
