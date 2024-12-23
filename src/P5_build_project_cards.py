@@ -16,7 +16,7 @@ def compute(name, f1, key):
     for _, row in dx.iterrows():
         name = ' '.join(row['2_use_case_name'].split())
         useID = row['1_use_case_id']
-        link = '../individual/{use_case_ID}.md'
+        link = f'../individual/{useID}.md'
         output.append(f"| [{useID}](<{link}>) | {name} |")
         
     output = "\n".join(output)
