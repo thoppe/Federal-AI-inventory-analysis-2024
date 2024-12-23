@@ -9,7 +9,7 @@ from P0_compute_checksums import compute_file_checksum
 force = False
 
 # Maximum fidelity we need
-n_max_clusters = 5
+n_max_clusters = 40
 
 data_dest = Path("data/processed")
 

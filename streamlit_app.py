@@ -24,20 +24,20 @@ st.markdown("_Draft viz - Work in progress_")
 
 @st.cache_data
 def load_data():
-    load_dest = Path("data/processed_responses/")
+    load_dest = Path("data/processed/")
 
     embedding = np.load(load_dest / "GPT_umap.npy")
     df_keywords = pd.read_csv(load_dest / "GPT_cluster_keywords.csv")
     clusters = np.load(load_dest / "GPT_clusters.npy")
 
-    key = "Use Case ID"
-    df0 = pd.read_csv(load_dest / "basic_consolidated.csv")
+    key = "1_use_case_id"
+    df0 = pd.read_csv("data/cleaned_OMB_inventory.csv")
     df1 = pd.read_csv(load_dest / "summary_text.csv")
 
     df0 = df0.set_index(key)
     df1 = df1.set_index(key)
 
-    df0["summary_text"] = df1["summary_text"]
+    df0["x2_summary_text"] = df1["x2_summary_text"]
     df0["ux"], df0["uy"] = embedding.T
 
     return df0, df_keywords, clusters
@@ -49,7 +49,8 @@ n_text_show = st.sidebar.slider(
     "Number of text labels", 0, df_keywords["n_clusters"].max(), 20
 )
 
-dept_opt = df.groupby("Agency").size().sort_values(ascending=False).index.tolist()
+
+dept_opt = df.groupby("3_agency").size().sort_values(ascending=False).index.tolist()
 dept_opt = ["None"] + sorted(dept_opt)
 highlight_department = st.sidebar.selectbox("Highlight Dept/Agency", dept_opt)
 
@@ -58,7 +59,7 @@ if highlight_text:
     highlight_text = highlight_text.lower()
 else:
     highlight_text = "DO NOT MATCH TO ANYTHING"
-textword_highlight_idx = df["summary_text"].str.lower().str.find(highlight_text) > -1
+textword_highlight_idx = df["x2_summary_text"].str.lower().str.find(highlight_text) > -1
 
 ## Basic coloring
 
@@ -75,7 +76,7 @@ df["size"] = point_size
 df["alpha"] = 0.4
 
 # Custom coloring
-text_highlight_idx = df["Agency"] == highlight_department
+text_highlight_idx = df["3_agency"] == highlight_department
 
 if textword_highlight_idx.sum():
     st.sidebar.write(
@@ -98,9 +99,9 @@ df.loc[text_highlight_idx, "line_width"] = 2
 df.loc[text_highlight_idx, "alpha"] = 0.8
 
 viz_cols = [
-    "Agency",
-    "Component",
-    "summary_text",
+    "3_agency",
+    "4_bureau",
+    "x2_summary_text",
 ]
 
 df["line_width"] = 0.1
