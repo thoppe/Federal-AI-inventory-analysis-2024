@@ -3,13 +3,35 @@ import pandas as pd
 import yaml
 
 df = pd.read_csv("data/cleaned_OMB_inventory.csv")
+
+def compute(name, f1, key):
+    output = []
+    output.append(f"# {name}")
+
+    dx = df[df[key] == name]
+
+    output.append(f"| Use Case ID | Title |")
+    output.append(f"| ----------- | ----- |")
+
+    for _, row in dx.iterrows():
+        output.append(f"| {row['1_use_case_id']} | {row['2_use_case_name']} |")
+        
+    output = "\n".join(output)
+    with open(f1, "w") as FOUT:
+        FOUT.write(output)
+
+key = '3_agency'
+P = Pipe(df[key].unique(), f'data/project_cards/{key}', output_suffix='.md', prefilter=False)
+P(compute, 1, key=key)
+
+########################################################################
+
 f_schema = "data/archive_reports/data_dictionary.yaml"
 
 with open(f_schema) as stream:
     schema = yaml.safe_load(stream)
     schema = schema["fields"]
     schema = pd.DataFrame(schema).set_index("name")
-
 
 def compute(use_case_ID, f1):
     row = df.loc[use_case_ID]
@@ -19,10 +41,12 @@ def compute(use_case_ID, f1):
     agency = row['3_agency']
     agency_abbr = row['3_abr']
     subagency = row['4_bureau']
+
+    f_agency = f'../3_agency/{agency}.md'
     
     output.append(f"# {title}")
     output.append(f"## {use_case_ID}")
-    output.append(f"_{agency}_ ({agency_abbr}) / {subagency}")
+    output.append(f"_[{agency}]({f_agency})_ ({agency_abbr}) / {subagency}")
     skip_rows = ['2_use_case_name', '3_abr', '3_agency', '4_bureau']
     
     output.append("\n")
