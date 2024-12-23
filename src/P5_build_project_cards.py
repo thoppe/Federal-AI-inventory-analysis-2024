@@ -11,10 +11,13 @@ def compute(name, f1, key):
     dx = df[df[key] == name]
 
     output.append(f"| Use Case ID | Title |")
-    output.append(f"| ----------- | ----- |")
-
+    output.append(f"|:----------- |:----- |")
+    
     for _, row in dx.iterrows():
-        output.append(f"| {row['1_use_case_id']} | {row['2_use_case_name']} |")
+        name = ' '.join(row['2_use_case_name'].split())
+        useID = row['1_use_case_id']
+        link = '../individual/{use_case_ID}.md'
+        output.append(f"| [{useID}](<{link}>) | {name} |")
         
     output = "\n".join(output)
     with open(f1, "w") as FOUT:
@@ -46,7 +49,7 @@ def compute(use_case_ID, f1):
     
     output.append(f"# {title}")
     output.append(f"## {use_case_ID}")
-    output.append(f"_[{agency}]({f_agency})_ ({agency_abbr}) / {subagency}")
+    output.append(f"_[{agency}](<{f_agency}>)_ ({agency_abbr}) / {subagency}")
     skip_rows = ['2_use_case_name', '3_abr', '3_agency', '4_bureau']
     
     output.append("\n")
